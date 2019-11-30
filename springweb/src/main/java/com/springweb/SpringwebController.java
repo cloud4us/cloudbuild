@@ -8,6 +8,6 @@ public class SpringwebController {
 	
 	@GetMapping
 	public String getIndex() {
-		return "Hello, Spring Web!";
+		return "Hello from Spring Web!";
 	}
 }

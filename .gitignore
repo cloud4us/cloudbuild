@@ -8,7 +8,10 @@ build/
 #### springweb ###
 **/bin
 **/build/
-docker/dependency
+springweb/docker/dependency
+springweb/docker/springweb.jar
+**/bin/
+**/build/
 
 ### STS ###
 .apt_generated

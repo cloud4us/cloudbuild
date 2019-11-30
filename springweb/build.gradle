@@ -4,6 +4,8 @@ plugins {
 	id 'java'
 }
 
+
+
 group = 'com.springweb'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -31,7 +33,33 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 }
+/**
+Unpack dependencies to the docker folder
+*/
+task unpack(type: Copy) {
+	dependsOn bootJar
+	from(zipTree(tasks.bootJar.outputs.files.singleFile))
+	into("docker/dependency")
+}
+/**
+Copy jar file to the docker folder
+*/
+task copyJar(type: Copy) {
+	dependsOn  build
+	from        "build/libs/${jar.baseName}-${jar.version}.jar"
+	into        "docker"
 
+	rename { String fileName ->
+		fileName.replace("-${jar.version}", "")
+	}
+}
+/**
+Prepares docker folder
+*/
+task docker(){
+	dependsOn copyJar
+	dependsOn unpack
+}
 test {
 	useJUnitPlatform()
 }
