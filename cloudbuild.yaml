@@ -1,10 +1,10 @@
-# Decrypt the file containing the key
+# 1. Decrypt the file containing the key
 steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
   - kms
   - decrypt
-  - --ciphertext-file=./id_rsa.enc
+  - --ciphertext-file=./cloud4us_id_rsa.enc
   - --plaintext-file=/root/.ssh/id_rsa
   - --location=global
   - --keyring=my-keyring
@@ -13,7 +13,7 @@ steps:
   - name: 'ssh'
     path: /root/.ssh
 
-# Set up git with key and domain.
+# 2. Set up git with key and domain.
 - name: 'gcr.io/cloud-builders/git'
   entrypoint: 'bash'
   args:
@@ -28,7 +28,7 @@ steps:
   volumes:
   - name: 'ssh'
     path: /root/.ssh
-# Use git clone develop branch.
+# 3. Use git clone develop branch.
 - name: 'gcr.io/cloud-builders/git'
   args:
   - 'clone'
@@ -36,9 +36,9 @@ steps:
   volumes:
   - name: 'ssh'
     path: /root/.ssh
-#   - name: 'cloud4us'
-#     path: /root/cloud4us
-# Build a docker file and jar
+  - name: 'cloudbuild'
+    path: /root/cloudbuild
+# 4. Build a docker file and jar
 - name: 'gcr.io/cloud-builders/gradle'
   entrypoint: 'bash'
   args:
@@ -48,13 +48,14 @@ steps:
     chmod +x ./gradlew
     ./gradlew docker
   volumes:
-  - name: 'springweb'
-    path: /root/springweb
+  - name: 'cloudbuild'
+    path: /root/cloudbuild
+# 5. 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--tag=gcr.io/$PROJECT_ID/springweb', 'cloudbuild/springweb/docker']
+  args: ['build', '--tag=gcr.io/$PROJECT_ID/springweb', 'springweb/docker']
   volumes:
-  - name: 'springweb'
-    path: /root/springweb
+  - name: 'cloudbuild'
+    path: /root/cloudbuild
 images: ['gcr.io/$PROJECT_ID/springweb']
 
 
