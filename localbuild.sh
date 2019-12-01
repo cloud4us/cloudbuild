@@ -1,3 +1,7 @@
 #!/bin/bash
+
+#update the cloud build components
 gcloud components install cloud-build-local
-cloud-build-local --config=cloudbuild.yaml .
+
+#submits your build
+gcloud builds submit --config cloudbuild.yaml .
