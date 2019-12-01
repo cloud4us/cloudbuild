@@ -36,8 +36,8 @@ steps:
   volumes:
   - name: 'ssh'
     path: /root/.ssh
-  - name: 'cloud4us'
-    path: /root/cloud4us
+#   - name: 'cloud4us'
+#     path: /root/cloud4us
 # Build a docker file and jar
 - name: 'gcr.io/cloud-builders/gradle'
   entrypoint: 'bash'
